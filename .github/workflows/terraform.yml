@@ -16,8 +16,6 @@ jobs:
       TF_VAR_scaleway_access_key: ${{ secrets.TF_VAR_SCALEWAY_ACCESS_KEY }}
       TF_VAR_scaleway_secret_key: ${{ secrets.TF_VAR_SCALEWAY_PROJECT }}
       TF_VAR_scaleway_project: ${{ secrets.TF_VAR_SCALEWAY_SECRET_KEY }}
-      TF_VAR_scaleway_region: ${{ env.TF_VAR_SCALEWAY_REGION }}
-      TF_VAR_scaleway_zone: ${{ env.TF_VAR_SCALEWAY_ZONE }}
 
     steps:
       - name: Checkout code
