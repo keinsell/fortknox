@@ -45,20 +45,24 @@ provider "scaleway" {
 }
 
 
-resource "scaleway_k8s_cluster" "ple8697573" {
-  name                        = "ple8697573"
+resource "scaleway_k8s_cluster" "wisebear" {
+  name                        = "wisebear"
   version                     = "1.24.3"
   cni                         = "cilium"
   delete_additional_resources = false
 }
 
-resource "scaleway_k8s_pool" "pl5cd46794" {
-  depends_on = [scaleway_k8s_cluster.ple8697573]
-  cluster_id = scaleway_k8s_cluster.ple8697573.id
+resource "scaleway_k8s_pool" "dummycat" {
+  depends_on = [scaleway_k8s_cluster.wisebear]
+  cluster_id = scaleway_k8s_cluster.wisebear.id
   region     = "pl-waw"
-  name       = "pl5cd46794"
+  name       = "dummycat"
   node_type  = "PLAY2-NANO"
   size       = 1
   zone       = var.scaleway_zone
+
+  # provisioner "local-exec" {
+  #   command = "mkdir -p ${path.module}/kubeconfig && scaleway k8s kubeconfig create ${scaleway_k8s_cluster.ple8697573.id} --output-type=kubeconfig > ${path.module}/kubeconfig/kubeconfig_${scaleway_k8s_cluster.ple8697573.id}.yaml"
+  # }
 }
 
