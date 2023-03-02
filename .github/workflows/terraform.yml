@@ -5,21 +5,13 @@ on:
     branches:
       - main
 
-env:
-  TF_BACKEND_STORAGE_ACCOUNT: "terraformstatestorage"
-  TF_BACKEND_CONTAINER: "tfstate"
-  TF_BACKEND_KEY: "example.tfstate"
-
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.tf_actions_working_dir }}
 
-    # env:
-    #   TF_VAR_scaleway_access_key: ${{ secrets.TF_VAR_scaleway_access_key }}
-    #   TF_VAR_scaleway_secret_key: ${{ secrets.TF_VAR_scaleway_secret_key }}
-    #   TF_VAR_scaleway_project: ${{ secrets.TF_VAR_scaleway_project }}
-    #   TF_VAR_scaleway_region: pl-waw
-    #   TF_VAR_scaleway_zone: pl-waw-1
+    runs-on: ubuntu-latest
 
     environment:
       name: production
@@ -29,23 +21,27 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_version: 1.0.9
+        uses: hashicorp/setup-terraform@v2
 
-      - name: Initialize Terraform
-        run: |
-          terraform -chdir=./terraform init
+      - name: Terraform fmt
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
 
       - name: Terraform Validate
-        run: terraform -chdir=./terraform validate
+        id: validate
+        run: terraform validate -no-color
 
       - name: Terraform Plan
         id: plan
-        run: terraform -chdir=./terraform plan
+        run: terraform plan -no-color
+        continue-on-error: false
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform -chdir=./terraform apply
-        env:
-          TF_APPROVE: "yes"
+        id: apply
+        run: terraform apply -no-color
+        continue-on-error: false
