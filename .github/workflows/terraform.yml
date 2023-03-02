@@ -7,14 +7,11 @@ on:
 
 jobs:
   deploy:
+    runs-on: ubuntu-latest
+    environment: production
     defaults:
       run:
         working-directory: "./terraform"
-
-    runs-on: ubuntu-latest
-
-    environment:
-      name: production
 
     steps:
       - name: Checkout code
@@ -38,10 +35,10 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color -out=plan
+        run: terraform plan -no-color -out=plan -input=false
         continue-on-error: false
 
       - name: Terraform Apply
         id: apply
-        run: terraform apply -no-color apply -auto-approve
+        run: terraform apply -no-color apply -auto-approve -input=false
         continue-on-error: false

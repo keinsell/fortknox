@@ -6,7 +6,6 @@ terraform {
     }
   }
   required_version = ">= 0.13"
-  disable_input    = true
 }
 
 variable "scaleway_region" {
