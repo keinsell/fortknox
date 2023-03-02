@@ -13,7 +13,7 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+
     # env:
     #   TF_VAR_scaleway_access_key: ${{ secrets.TF_VAR_scaleway_access_key }}
     #   TF_VAR_scaleway_secret_key: ${{ secrets.TF_VAR_scaleway_secret_key }}
@@ -21,9 +21,9 @@ jobs:
     #   TF_VAR_scaleway_region: pl-waw
     #   TF_VAR_scaleway_zone: pl-waw-1
 
-    environment: 
+    environment:
       name: production
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -35,20 +35,17 @@ jobs:
 
       - name: Initialize Terraform
         run: |
-          terraform init \
-            -backend-config="storage_account_name=${TF_BACKEND_STORAGE_ACCOUNT}" \
-            -backend-config="container_name=${TF_BACKEND_CONTAINER}" \
-            -backend-config="key=${TF_BACKEND_KEY}"
+          terraform -chdir=./terraform init
 
       - name: Terraform Validate
-        run: terraform validate
+        run: terraform -chdir=./terraform validate
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -out=tfplan
+        run: terraform -chdir=./terraform plan -out=tfplan
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply tfplan
+        run: terraform -chdir=./terraform apply tfplan
         env:
           TF_APPROVE: "yes"
