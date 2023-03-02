@@ -1,0 +1,15 @@
+{
+  "name": "fortknox-infrastructure",
+  "version": "1.0.0",
+  "description": "🕸️ Fortknox is a little self-managed infrastruccture build on Scaleway used by Jakub Olan for deployment of personal projects on Kubernetes, combined with DevOps experimenting in learning purposes.",
+  "private": true,
+  "scripts": {
+    "plan": "zx ./scripts/plan.mjs",
+    "postinstall": "zx ./scripts/postinstall.mjs"
+  },
+  "author": "Jakub Olan <keinsell@protonmail.com> (github.com/keinsell)",
+  "license": "ISC",
+  "dependencies": {
+    "zx": "^7.2.0"
+  }
+}
