@@ -72,7 +72,7 @@ spec:
     #   replicas: 1
     #   resources: {}
   auditing: # Provide a security-relevant chronological set of records，recording the sequence of activities happening on the platform, initiated by different tenants.
-    enabled: true # Enable or disable the KubeSphere Auditing Log System.
+    enabled: false # Enable or disable the KubeSphere Auditing Log System.
     # operator:
     #   resources: {}
     # webhook:
@@ -94,13 +94,13 @@ spec:
     #   replicas: 2
     #   resources: {}
   logging: # (CPU: 57 m, Memory: 2.76 G) Flexible logging functions are provided for log query, collection and management in a unified console. Additional log collectors can be added, such as Elasticsearch, Kafka and Fluentd.
-    enabled: true # Enable or disable the KubeSphere Logging System.
+    enabled: false # Enable or disable the KubeSphere Logging System.
     logsidecar:
       enabled: true
       replicas: 2
       # resources: {}
   metrics_server: # (CPU: 56 m, Memory: 44.35 MiB) It enables HPA (Horizontal Pod Autoscaler).
-    enabled: true # Enable or disable metrics-server.
+    enabled: false # Enable or disable metrics-server.
   monitoring:
     storageClass: "" # If there is an independent StorageClass you need for Prometheus, you can specify it here. The default StorageClass is used by default.
     node_exporter:
@@ -141,16 +141,16 @@ spec:
       type: none # Specify "weave-scope" for this field to enable Service Topology. "none" means that Service Topology is disabled.
   openpitrix: # An App Store that is accessible to all platform tenants. You can use it to manage apps across their entire lifecycle.
     store:
-      enabled: true # Enable or disable the KubeSphere App Store.
+      enabled: false # Enable or disable the KubeSphere App Store.
   servicemesh: # (0.3 Core, 300 MiB) Provide fine-grained traffic management, observability and tracing, and visualized traffic topology.
     enabled: false # Base component (pilot). Enable or disable KubeSphere Service Mesh (Istio-based).
     istio: # Customizing the istio installation configuration, refer to https://istio.io/latest/docs/setup/additional-setup/customize-installation/
       components:
         ingressGateways:
           - name: istio-ingressgateway
-            enabled: true
+            enabled: false
         cni:
-          enabled: true
+          enabled: false
   edgeruntime: # Add edge nodes to your cluster and deploy workloads on edge nodes.
     enabled: false
     kubeedge: # kubeedge configurations
