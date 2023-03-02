@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "plan": "zx ./scripts/plan.mjs",
-    "postinstall": "zx ./scripts/postinstall.mjs"
+    "postinstall": "zx ./scripts/postinstall.mjs",
+    "apply": "zx ./scripts/apply.mjs",
   },
   "author": "Jakub Olan <keinsell@protonmail.com> (github.com/keinsell)",
   "license": "ISC",
