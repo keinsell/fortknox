@@ -6,7 +6,8 @@
   "scripts": {
     "plan": "zx ./scripts/plan.mjs",
     "postinstall": "zx ./scripts/postinstall.mjs",
-    "apply": "zx ./scripts/apply.mjs"
+    "apply": "zx ./scripts/apply.mjs",
+    "k8s:deploy": "zx ./scripts/kubernetes-deploy.mjs"
   },
   "author": "Jakub Olan <keinsell@protonmail.com> (github.com/keinsell)",
   "license": "ISC",
