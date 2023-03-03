@@ -32,19 +32,32 @@ provider "random" {
   # Configuration options
 }
 
-resource "scaleway_k8s_cluster" "wisebear" {
+resource "random_pet" "cluster" {
+  keepers = {
+    ami_id = var.ami_id
+  }
+}
+
+resource "random_pet" "pool" {
+  keepers = {
+    ami_id = var.ami_id
+  }
+}
+
+
+resource "scaleway_k8s_cluster" "cluster" {
   project_id                  = var.scaleway_project
-  name                        = "wisebear"
+  name                        = random_pet.cluster.id
   version                     = "1.24.3"
   cni                         = "cilium"
   delete_additional_resources = true
 }
 
-resource "scaleway_k8s_pool" "dummycat" {
-  # depends_on = [scaleway_k8s_cluster.wisebear]
-  cluster_id          = scaleway_k8s_cluster.wisebear.id
+resource "scaleway_k8s_pool" "pool" {
+  depends_on          = [scaleway_k8s_cluster.cluster]
+  cluster_id          = scaleway_k8s_cluster.cluster.id
   region              = var.scaleway_region
-  name                = "dummycat"
+  name                = random_pet.pool.id
   node_type           = "PLAY2-NANO"
   size                = 1
   zone                = var.scaleway_zone
