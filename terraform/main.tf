@@ -1,8 +1,18 @@
 terraform {
+  cloud {
+    organization = "keinsell"
+    workspaces {
+      name = "fortknox"
+    }
+  }
   required_providers {
     scaleway = {
       source  = "scaleway/scaleway"
       version = "2.12.0"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "3.4.3"
     }
   }
   required_version = ">= 1.0"
@@ -18,6 +28,9 @@ provider "scaleway" {
   zone       = var.scaleway_zone
 }
 
+provider "random" {
+  # Configuration options
+}
 
 resource "scaleway_k8s_cluster" "wisebear" {
   project_id                  = var.scaleway_project
