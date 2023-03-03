@@ -24,6 +24,10 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
 
+      - name: Terraform Login
+        id: login
+        run: terraform login ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
+
       - name: Terraform fmt
         id: fmt
         run: terraform fmt -check
