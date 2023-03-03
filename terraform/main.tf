@@ -5,36 +5,9 @@ terraform {
       version = "2.12.0"
     }
   }
-  required_version = ">= 0.13"
+  required_version = ">= 0.15"
 }
 
-variable "scaleway_region" {
-  type        = string
-  description = "Scaleway region"
-  default     = "pl-waw"
-}
-
-variable "scaleway_zone" {
-  type        = string
-  description = "Scaleway zone"
-  default     = "pl-waw-1"
-}
-
-variable "scaleway_project" {
-  type        = string
-  description = "Scaleway project id"
-  default     = "d25f8b4c-71cc-463a-9ec9-b193a5d4c04a"
-}
-
-variable "scaleway_access_key" {
-  type        = string
-  description = "Scaleway access key"
-}
-
-variable "scaleway_secret_key" {
-  type        = string
-  description = "Scaleway secret key"
-}
 
 
 provider "scaleway" {
@@ -46,23 +19,25 @@ provider "scaleway" {
 
 
 resource "scaleway_k8s_cluster" "wisebear" {
+  project_id                  = var.scaleway_project
   name                        = "wisebear"
   version                     = "1.24.3"
   cni                         = "cilium"
-  delete_additional_resources = false
+  delete_additional_resources = true
 }
 
 resource "scaleway_k8s_pool" "dummycat" {
-  depends_on = [scaleway_k8s_cluster.wisebear]
-  cluster_id = scaleway_k8s_cluster.wisebear.id
-  region     = "pl-waw"
-  name       = "dummycat"
-  node_type  = "PLAY2-NANO"
-  size       = 1
-  zone       = var.scaleway_zone
-
-  # provisioner "local-exec" {
-  #   command = "mkdir -p ${path.module}/kubeconfig && scaleway k8s kubeconfig create ${scaleway_k8s_cluster.ple8697573.id} --output-type=kubeconfig > ${path.module}/kubeconfig/kubeconfig_${scaleway_k8s_cluster.ple8697573.id}.yaml"
-  # }
+  # depends_on = [scaleway_k8s_cluster.wisebear]
+  cluster_id          = scaleway_k8s_cluster.wisebear.id
+  region              = "pl-waw"
+  name                = "dummycat"
+  node_type           = "PLAY2-NANO"
+  size                = 1
+  zone                = var.scaleway_zone
+  wait_for_pool_ready = true
 }
 
+output "kubeconfig" {
+  value     = scaleway_k8s_cluster.wisebear.kubeconfig
+  sensitive = true
+}
