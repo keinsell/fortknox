@@ -5,7 +5,7 @@ terraform {
       version = "2.12.0"
     }
   }
-  required_version = ">= 0.15"
+  required_version = ">= 1.0"
 }
 
 
@@ -15,6 +15,7 @@ provider "scaleway" {
   access_key = var.scaleway_access_key
   secret_key = var.scaleway_secret_key
   project_id = var.scaleway_project
+  zone       = var.scaleway_zone
 }
 
 
@@ -29,7 +30,7 @@ resource "scaleway_k8s_cluster" "wisebear" {
 resource "scaleway_k8s_pool" "dummycat" {
   # depends_on = [scaleway_k8s_cluster.wisebear]
   cluster_id          = scaleway_k8s_cluster.wisebear.id
-  region              = "pl-waw"
+  region              = var.scaleway_region
   name                = "dummycat"
   node_type           = "PLAY2-NANO"
   size                = 1
