@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: ${{ if github.ref == 'refs/heads/main' }}production${{ else }}${{ github.ref }}${{ end }}
+    environment: ${{ github.ref != 'refs/heads/master' && 'staging' || 'production' }}
     defaults:
       run:
         working-directory: "./terraform"
