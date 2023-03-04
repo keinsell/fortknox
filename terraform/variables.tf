@@ -25,3 +25,19 @@ variable "scaleway_secret_key" {
   type        = string
   description = "Scaleway secret key"
 }
+
+variable "mongodb_public_key" {
+  type        = string
+  description = "MongoDB Atlas public key"
+}
+
+variable "mongodb_private_key" {
+  type        = string
+  description = "MongoDB Atlas private key"
+}
+
+variable "mongodb_org_id" {
+  type        = string
+  description = "MongoDB Atlas organization id"
+}
+

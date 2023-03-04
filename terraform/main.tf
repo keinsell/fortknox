@@ -10,6 +10,10 @@ terraform {
       source  = "scaleway/scaleway"
       version = "2.12.0"
     }
+    mongodbatlas = {
+      source  = "mongodb/mongodbatlas"
+      version = "1.8.0"
+    }
     random = {
       source  = "hashicorp/random"
       version = "3.4.3"
@@ -19,23 +23,12 @@ terraform {
 }
 
 
-
-provider "scaleway" {
-  region     = var.scaleway_region
-  access_key = var.scaleway_access_key
-  secret_key = var.scaleway_secret_key
-  project_id = var.scaleway_project
-  zone       = var.scaleway_zone
-}
-
-provider "random" {
-  # Configuration options
-}
-
 resource "random_pet" "cluster" {
 }
 
 resource "random_pet" "pool" {
+}
+resource "random_pet" "database_cluster" {
 }
 
 
@@ -58,7 +51,17 @@ resource "scaleway_k8s_pool" "pool" {
   wait_for_pool_ready = true
 }
 
-output "kubeconfig" {
-  value     = scaleway_k8s_cluster.cluster.kubeconfig
-  sensitive = true
+resource "mongodbatlas_project" "mongodb_project" {
+  org_id = var.mongodb_org_id
+  name   = "fortknox"
+}
+
+resource "mongodbatlas_cluster" "mongodb" {
+  project_id = mongodbatlas_project.mongodb_project.id
+  name       = random_pet.database_cluster.id
+
+  provider_name               = "TENANT"
+  backing_provider_name       = "AWS"
+  provider_region_name        = "US_EAST_1"
+  provider_instance_size_name = "M0"
 }
