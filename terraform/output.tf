@@ -4,6 +4,6 @@ output "kubeconfig" {
 }
 
 output "mongodb_uri" {
-  value     = mongodbatlas_cluster.mongodb.connection_strings[0].standard_srv
+  value     = mongodbatlas_cluster.fortknox.connection_strings[0].standard_srv
   sensitive = true
 }

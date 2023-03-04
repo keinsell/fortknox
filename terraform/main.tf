@@ -51,17 +51,45 @@ resource "scaleway_k8s_pool" "pool" {
   wait_for_pool_ready = true
 }
 
-resource "mongodbatlas_project" "mongodb_project" {
+resource "mongodbatlas_project" "fortknox" {
   org_id = var.mongodb_org_id
   name   = "fortknox"
 }
 
-resource "mongodbatlas_cluster" "mongodb" {
-  project_id = mongodbatlas_project.mongodb_project.id
+resource "mongodbatlas_cluster" "fortknox" {
+  project_id = mongodbatlas_project.fortknox.id
   name       = random_pet.database_cluster.id
 
   provider_name               = "TENANT"
   backing_provider_name       = "AWS"
   provider_region_name        = "US_EAST_1"
   provider_instance_size_name = "M0"
+}
+
+data "mongodbatlas_cluster" "fortknox" {
+  depends_on = [mongodbatlas_cluster.fortknox]
+  project_id = mongodbatlas_cluster.fortknox.project_id
+  name       = mongodbatlas_cluster.fortknox.name
+}
+
+resource "mongodbatlas_database_user" "user" {
+  username           = var.database_user
+  password           = var.database_password
+  project_id         = mongodbatlas_project.fortknox.id
+  auth_database_name = "admin"
+
+  roles {
+    role_name     = "readWrite"
+    database_name = var.database_name
+  }
+  labels {
+    key   = "Name"
+    value = "Default User"
+  }
+}
+
+resource "mongodbatlas_project_ip_access_list" "ip" {
+  project_id = mongodbatlas_project.fortknox.id
+  cidr_block = "0.0.0.0/0"
+  comment    = "IP Address for accessing the cluster"
 }
