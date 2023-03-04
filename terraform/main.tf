@@ -2,7 +2,7 @@ terraform {
   cloud {
     organization = "keinsell"
     workspaces {
-      name = var.project_name
+      name = "fortknox"
     }
   }
   required_providers {
@@ -53,7 +53,7 @@ resource "scaleway_k8s_pool" "pool" {
 
 resource "mongodbatlas_project" "mongodb_project" {
   org_id = var.mongodb_org_id
-  name   = var.project_name
+  name   = "fortknox"
 }
 
 resource "mongodbatlas_cluster" "mongodb" {
