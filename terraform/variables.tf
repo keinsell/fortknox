@@ -1,3 +1,9 @@
+variable "project_name" {
+  type        = string
+  description = "Fixed project name as used by Atlas and GitHub"
+  default     = "fortknox"
+}
+
 variable "scaleway_region" {
   type        = string
   description = "Scaleway region"
